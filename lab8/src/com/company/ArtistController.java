@@ -1,19 +1,30 @@
 package com.company;
 
-public class ArtistController {
-    private String nume;
-    private String tara;
+import java.sql.*;
 
-    public ArtistController(String name, String country) {
-        nume = name;
-        tara = country;
+public class ArtistController implements DAOartist{
+    Connection conn;
+    Statement stmt = null;
+
+    public void setConn(Connection conn){
+        this.conn = conn;
     }
 
-    public String getmCountry() {
-        return tara;
+    public void create(String name, String country){
+        String sql = "INSERT INTO ARTISTS (name, country) VALUES ('" + name + "', '" + country + "')";
+        stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(sql);
     }
 
-    public String getmName() {
-        return nume;
+    public boolean findByName(String name){
+        String sql = "SELECT id FROM ARTISTS WHERE name = '" + name +"'";
+        stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(sql);
+        while (rs.next()) {
+            int id = rs.getInt("id");
+            if (id != 0){
+                return true;
+            }
+        }
     }
 }

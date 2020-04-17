@@ -1,26 +1,30 @@
 package com.company;
+import java.sql.*;
 
 public class AlbumController {
-    private String nume;
-    private int ArtistId;
-    private int ReleaseYear;
+    Connection conn;
+    Statement stmt = null;
 
-    public AlbumController(String name, int artistId, int releaseYear) {
-        nume = name;
-        ArtistId = artistId;
-        ReleaseYear = releaseYear;
+    public void setConn(Connection conn){
+        this.conn = conn;
     }
 
-    public String getmName() {
-        return nume;
+    public void create(String name, int artistId, int realeaseYear){
+        String sql = "INSERT INTO ALBUMS (name, artist_id, release_year) VALUES ('" + name + "'," + artistId + ", " + realeaseYear +")";
+        stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(sql);
     }
 
-    public int getmArtistId() {
-        return ArtistId;
-    }
-
-    public int getmReleaseYear() {
-        return ReleaseYear;
+    public boolean findByArtist(int artistId){
+        String sql = "SELECT id FROM ALBUMS where artist_id ="+ artistId;
+        stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(sql);
+        while (rs.next()) {
+            int id = rs.getInt("id");
+            if (id != 0){
+                return true;
+            }
+        }
     }
 
 }
